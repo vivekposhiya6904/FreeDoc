@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">FreeDoc</string>
+    <string name="app_motto">Your Documents. Your Device. Your Control.</string>
+    <string name="status_title">Phase 0: Engineering Foundation</string>
+    <string name="status_description">Document viewing, editing, and conversion engines are actively under development.</string>
+    <string name="feature_offline_title">100% Offline</string>
+    <string name="feature_offline_desc">All documents are processed strictly on-device without cloud dependencies.</string>
+    <string name="feature_privacy_title">No Accounts or Tracking</string>
+    <string name="feature_privacy_desc">No logins, advertisements, watermarks, or telemetry.</string>
+    <string name="feature_formats_title">Planned Formats</string>
+    <string name="feature_formats_desc">PDF, DOCX, ODT, and common image formats.</string>
+
+    <!-- PDF Viewer Strings -->
+    <string name="action_open_pdf">Open PDF Document</string>
+    <string name="action_open_another_pdf">Open Another PDF</string>
+    <string name="action_previous_page">Previous Page</string>
+    <string name="action_next_page">Next Page</string>
+    <string name="action_reset_zoom">Reset Zoom</string>
+    <string name="action_close_viewer">Close</string>
+    <string name="page_indicator">Page %1$d of %2$d</string>
+    <string name="loading_document">Opening PDF document…</string>
+    <string name="loading_page">Rendering page %1$d…</string>
+    <string name="error_empty_pdf_title">Empty Document</string>
+    <string name="error_empty_pdf_desc">The selected file is empty or contains no readable content.</string>
+    <string name="error_invalid_pdf_title">Invalid PDF Document</string>
+    <string name="error_invalid_pdf_desc">The selected file is corrupted or is not a valid PDF.</string>
+    <string name="error_password_protected_title">Password-Protected PDF</string>
+    <string name="error_password_protected_desc">This PDF is encrypted with a password. Encrypted PDFs are not yet supported.</string>
+    <string name="error_read_failed_title">Unable to Read File</string>
+    <string name="error_read_failed_desc">Could not read the file from storage. Permission may have expired or the file was moved.</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_select_another_file">Select Another PDF</string>
+    <string name="active_document">Active Document</string>
+    <string name="resume_viewing">Resume Viewing</string>
+</resources>
