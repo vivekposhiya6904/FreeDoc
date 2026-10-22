@@ -36,6 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        com.freedoc.app.engine.pdf.PdfTextExtractor.init(applicationContext)
 
         val initialUri: Uri? = if (intent?.action == Intent.ACTION_VIEW) intent.data else null
 
@@ -58,6 +59,9 @@ fun FreeDocApp(
     val context = LocalContext.current
     var currentScreen by rememberSaveable { mutableStateOf(AppScreen.HOME) }
     val uiState by viewModel.uiState.collectAsState()
+    val searchState by viewModel.searchState.collectAsState()
+    val navigationRequest by viewModel.navigationRequest.collectAsState()
+    val selection by viewModel.selection.collectAsState()
 
     // Storage Access Framework Document Picker for PDF files
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -80,7 +84,13 @@ fun FreeDocApp(
 
     // Intercept hardware/system back button while viewing a document
     BackHandler(enabled = currentScreen == AppScreen.VIEWER) {
-        currentScreen = AppScreen.HOME
+        if (selection != null) {
+            viewModel.clearSelection()
+        } else if (searchState.isSearchActive) {
+            viewModel.closeSearch()
+        } else {
+            currentScreen = AppScreen.HOME
+        }
     }
 
     val activeDocumentName = when (val state = uiState) {
@@ -103,6 +113,15 @@ fun FreeDocApp(
         AppScreen.VIEWER -> {
             PdfViewerScreen(
                 uiState = uiState,
+                searchState = searchState,
+                navigationRequest = navigationRequest,
+                selection = selection,
+                onSelectWordAt = { pageIndex, x, y -> viewModel.selectWordAt(pageIndex, x, y) },
+                onExtendSelectionTo = { pageIndex, x, y, isStart -> viewModel.updateSelectionBoundary(pageIndex, x, y, isStart) },
+                onStartSelectionDrag = { isStart -> viewModel.startSelectionDrag(isStart) },
+                onEndSelectionDrag = { viewModel.endSelectionDrag() },
+                onSelectAllOnPage = { pageIndex -> viewModel.selectAllOnPage(pageIndex) },
+                onClearSelection = { viewModel.clearSelection() },
                 onPreviousPage = { viewModel.previousPage() },
                 onNextPage = { viewModel.nextPage() },
                 onSelectAnotherFile = {
@@ -110,7 +129,22 @@ fun FreeDocApp(
                 },
                 onClose = {
                     currentScreen = AppScreen.HOME
-                }
+                },
+                onPageVisible = { pageIndex ->
+                    viewModel.onPageVisible(pageIndex)
+                },
+                onRequestPage = { pageIndex ->
+                    viewModel.requestPage(pageIndex)
+                },
+                onJumpToPage = { pageOneBased ->
+                    viewModel.jumpToPage(pageOneBased)
+                },
+                onOpenSearch = { viewModel.openSearch() },
+                onCloseSearch = { viewModel.closeSearch() },
+                onSearchQueryChanged = { viewModel.onSearchQueryChanged(it) },
+                onNextSearchMatch = { viewModel.nextSearchMatch() },
+                onPreviousSearchMatch = { viewModel.previousSearchMatch() },
+                getPageContent = { pageIndex -> viewModel.getExtractedPageContent(pageIndex) }
             )
         }
     }

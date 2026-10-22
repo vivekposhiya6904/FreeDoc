@@ -32,4 +32,19 @@
     <string name="action_select_another_file">Select Another PDF</string>
     <string name="active_document">Active Document</string>
     <string name="resume_viewing">Resume Viewing</string>
+
+    <!-- Page Navigation Strings -->
+    <string name="jump_to_page_title">Jump to Page</string>
+    <string name="jump_to_page_label">Enter page number (1 – %1$d)</string>
+    <string name="action_jump">Go</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_first_page">First (1)</string>
+    <string name="action_last_page">Last (%1$d)</string>
+    <string name="page_badge_cd">Page %1$d of %2$d. Double-tap to jump to page.</string>
+    <string name="action_zoom_in">Zoom in</string>
+    <string name="action_zoom_out">Zoom out</string>
+    <string name="action_toggle_controls">Toggle reader controls</string>
+    <string name="action_hide_controls">Hide controls</string>
+    <string name="fast_scroll_cd">Fast scroll bar. Drag vertically to navigate pages.</string>
+    <string name="reading_progress_cd">Page %1$d of %2$d, %3$d percent complete. Tap to jump to page.</string>
 </resources>

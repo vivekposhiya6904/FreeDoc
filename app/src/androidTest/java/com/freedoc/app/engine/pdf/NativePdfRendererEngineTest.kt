@@ -78,7 +78,13 @@ class NativePdfRendererEngineTest {
             assertTrue("Bitmap height must be positive", bitmap.height > 0)
             assertEquals("Bitmap config must be ARGB_8888", Bitmap.Config.ARGB_8888, bitmap.config)
 
-            // 4. Test out-of-bounds page index
+            // 4. Verify page dimensions and aspect ratio
+            val dimensions = doc.getPageDimensions(0)
+            assertTrue("Page width in points must be positive", dimensions.width > 0)
+            assertTrue("Page height in points must be positive", dimensions.height > 0)
+            assertTrue("Page aspect ratio must be positive", dimensions.aspectRatio > 0f)
+
+            // 5. Test out-of-bounds page index
             try {
                 doc.renderPage(99)
                 fail("Requesting out-of-bounds page index must throw IndexOutOfBoundsException")

@@ -31,7 +31,7 @@ class NativePdfDocument internal constructor(
     override val metadata: DocumentMetadata,
     private val pfd: ParcelFileDescriptor,
     private val renderer: PdfRenderer,
-    private val tempFile: File? = null
+    internal var tempFile: File? = null
 ) : PdfDocument {
 
     override val pageCount: Int
@@ -40,6 +40,25 @@ class NativePdfDocument internal constructor(
     private val renderLock = Any()
     @Volatile
     private var isClosed = false
+    private val dimensionCache = mutableMapOf<Int, PageDimensions>()
+
+    override fun getPageDimensions(pageIndex: Int): PageDimensions {
+        synchronized(renderLock) {
+            check(!isClosed) { "Document is already closed." }
+            if (pageIndex !in 0 until pageCount) {
+                throw IndexOutOfBoundsException("Page index $pageIndex is out of range [0, $pageCount).")
+            }
+            return dimensionCache.getOrPut(pageIndex) {
+                var page: PdfRenderer.Page? = null
+                try {
+                    page = renderer.openPage(pageIndex)
+                    PageDimensions(page.width, page.height)
+                } finally {
+                    page?.close()
+                }
+            }
+        }
+    }
 
     override suspend fun renderPage(pageIndex: Int, targetWidth: Int): Bitmap = withContext(Dispatchers.IO) {
         synchronized(renderLock) {
